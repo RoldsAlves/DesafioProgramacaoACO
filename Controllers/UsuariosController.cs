@@ -72,7 +72,7 @@ namespace DesafioProgramacao.Controllers
             ViewBag.PerfilId = new SelectList(db.Perfils, "Id", "Descricao");
             ViewBag.EstadoId = new SelectList(db.Estados, "Id", "UF");
             ViewBag.EnderecoId = new SelectList(ListItemEndereco(), "Value", "Text");
-            ViewBag.TipoEndereco = new SelectList(TipoEndereco());
+            ViewBag.TipoEndereco = new SelectList(TipoEnderecos());
             Usuario usuario = new Usuario();
             usuario.UsuarioEnderecos = new List<UsuarioEndereco>()
             {
@@ -89,19 +89,19 @@ namespace DesafioProgramacao.Controllers
         // obter mais detalhes, veja https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "Id,CPF,Nome,Email,PerfilId,DataCadastro,UsuarioEnderecos")] Usuario usuario, List<int> item_EnderecoId, List<string> item_TipoEndereco)
+        public async Task<ActionResult> Create([Bind(Include = "Id,CPF,Nome,Email,PerfilId,DataCadastro,UsuarioEnderecos")] Usuario usuario, List<int> EnderecoId, List<string> TipoEndereco)
         {
             usuario.DataCadastro = DateTime.Today;
             List<UsuarioEndereco> usuarioEndereco = new List<UsuarioEndereco>();
-            for (int item = 0; item < item_EnderecoId.Count; item++)
+            for (int item = 0; item < EnderecoId.Count; item++)
             {
-                if (item_EnderecoId[item] > 0)
+                if (EnderecoId[item] > 0)
                 {
                     usuarioEndereco.Add(new UsuarioEndereco
                     {
-                        TipoEndereco = item_TipoEndereco[item],
-                        EnderecoId = item_EnderecoId[item],
-                        Endereco = db.Enderecos.Find(item_EnderecoId[item]),
+                        TipoEndereco = TipoEndereco[item],
+                        EnderecoId = EnderecoId[item],
+                        Endereco = db.Enderecos.Find(EnderecoId[item]),
                         Usuario = usuario
                     });
                 }
@@ -116,8 +116,8 @@ namespace DesafioProgramacao.Controllers
             }
 
             ViewBag.PerfilId = new SelectList(db.Perfils, "Id", "Descricao", usuario.PerfilId);
-            ViewBag.EnderecoId = new SelectList(db.Enderecos, "Id", "Logradouro", item_EnderecoId);
-            ViewBag.TipoEndereco = new SelectList(TipoEndereco(), item_TipoEndereco);
+            ViewBag.EnderecoId = new SelectList(db.Enderecos, "Id", "Logradouro", EnderecoId);
+            ViewBag.TipoEndereco = new SelectList(TipoEnderecos());
             return View(usuario);
         }
 
@@ -135,7 +135,7 @@ namespace DesafioProgramacao.Controllers
             }
             ViewBag.PerfilId = new SelectList(db.Perfils, "Id", "Descricao", usuario.PerfilId);
             ViewBag.EnderecoId = new SelectList(db.Enderecos, "Id", "Logradouro", usuario.UsuarioEnderecos);
-            ViewBag.TipoEndereco = new SelectList(TipoEndereco(), usuario.UsuarioEnderecos);
+            ViewBag.TipoEndereco = new SelectList(TipoEnderecos(), usuario.UsuarioEnderecos);
             return View(usuario);
         }
 
@@ -144,18 +144,18 @@ namespace DesafioProgramacao.Controllers
         // obter mais detalhes, veja https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "Id,CPF,Nome,Email,PerfilId,DataCadastro")] Usuario usuario, List<int> item_EnderecoId, List<string> item_TipoEndereco)
+        public async Task<ActionResult> Edit([Bind(Include = "Id,CPF,Nome,Email,PerfilId,DataCadastro")] Usuario usuario, List<int> EnderecoId, List<string> TipoEndereco)
         {
             List<UsuarioEndereco> usuarioEndereco = new List<UsuarioEndereco>();
-            for (int item = 0; item < item_EnderecoId.Count; item++)
+            for (int item = 0; item < EnderecoId.Count; item++)
             {
-                if (item_EnderecoId[item] > 0)
+                if (EnderecoId[item] > 0)
                 {
                     usuarioEndereco.Add(new UsuarioEndereco
                     {
-                        TipoEndereco = item_TipoEndereco[item],
-                        EnderecoId = item_EnderecoId[item],
-                        Endereco = db.Enderecos.Find(item_EnderecoId[item]),
+                        TipoEndereco = TipoEndereco[item],
+                        EnderecoId = EnderecoId[item],
+                        Endereco = db.Enderecos.Find(EnderecoId[item]),
                         Usuario = usuario
                     });
                 }
@@ -169,7 +169,7 @@ namespace DesafioProgramacao.Controllers
             }
             ViewBag.PerfilId = new SelectList(db.Perfils, "Id", "Descricao", usuario.PerfilId);
             ViewBag.EnderecoId = new SelectList(db.Enderecos, "Id", "Logradouro");
-            ViewBag.TipoEndereco = new SelectList(TipoEndereco());
+            ViewBag.TipoEndereco = new SelectList(TipoEnderecos());
             return View(usuario);
         }
 
@@ -208,7 +208,7 @@ namespace DesafioProgramacao.Controllers
             base.Dispose(disposing);
         }
 
-        private List<string> TipoEndereco()
+        private List<string> TipoEnderecos()
         {
             var tipo = new List<string>()
             {
