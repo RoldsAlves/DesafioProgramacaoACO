@@ -1,0 +1,216 @@
+﻿@model DesafioProgramacao.Models.Usuario
+
+@{
+    ViewBag.Title = "Create";
+    DesafioProgramacao.Models.Endereco endereco = new DesafioProgramacao.Models.Endereco();
+}
+
+<h2>Create</h2>
+
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal">
+        <h4>Usuario</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CPF, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CPF, new { htmlAttributes = new { @class = "form-control", @pattern="[0-9]{11}", @onkeyup = "formataCPF(this)" } })
+                @Html.ValidationMessageFor(model => model.CPF, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Nome, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Nome, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Nome, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.PerfilId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownList("PerfilId", null, string.Empty, htmlAttributes: new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.PerfilId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        @foreach(var item in Model.UsuarioEnderecos)
+        {
+            <section class="section-endereco">
+                <div class="form-group tipo-endereco">
+                    @Html.LabelFor(model => item.TipoEndereco, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => item.TipoEndereco, (SelectList)ViewBag.TipoEndereco, string.Empty, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.UsuarioEnderecos.Single().TipoEndereco, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group lista-endereco">
+                    @Html.LabelFor(model => item.EnderecoId, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.DropDownListFor(model => item.EnderecoId, (SelectList)ViewBag.EnderecoId, string.Empty, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => item.EnderecoId, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+            </section>
+
+        }
+        <div class="form-group">
+            @Html.Label("Novo Endereço")
+            <a href="#" id="AddEndereco" class="btn btn-primary bntAddEndereco">+</a>
+        </div>
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Salvar" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Voltar", "Index")
+</div>
+<!-- Modal para Adicionar um Novo Endereco durante cadastro do usuario -->
+<section class="modal fade modalEndereco" role="dialog" tabindex="-1" aria-hidden="true" id="modalEndereco">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Fechar">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h3 class="modal-title"> Adicionar novo endereço </h3>
+            </div>
+            <div class="modal-body">
+                <div class="container">
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.Logradouro, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.Logradouro, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.Numero, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.Numero, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.Complemento, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.Complemento, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.CEP, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.CEP, new { htmlAttributes = new { @class = "form-control", @onkeyup = "formataCEP(this)" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.Bairro, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.Bairro, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.Cidade, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.EditorFor(model => endereco.Cidade, new { htmlAttributes = new { @class = "form-control" } })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => endereco.EstadoId, htmlAttributes: new { @class = "control-label col-md-2" })
+                        <div class="col-md-10">
+                            @Html.DropDownListFor(model => endereco.EstadoId, (SelectList)ViewBag.EstadoId, string.Empty, htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="salvarEndereco" data-dismiss="modal" onclick="SalvarEndereco()">Salvar</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script type="text/javascript">
+        $('.bntAddEndereco').on('click', function () {
+            const tipoEndereco = $('.tipo-endereco').first().clone();
+            const listaEndereco = $('.lista-endereco').first().clone();
+            $('.section-endereco').append(tipoEndereco);
+            $('.section-endereco').append(listaEndereco);
+        });
+
+        $('#document').ready(function () {
+            const listaEndereco = $('#item_EnderecoId');
+            const qtde = $('#item_EnderecoId option').length;
+            listaEndereco.append("<option value=" + qtde + ">Novo Endereço</option>");
+        });
+
+        $('#item_EnderecoId').on('change', function () {
+            const itemSelecionado = $('#item_EnderecoId option:selected').text();
+            if (itemSelecionado === "Novo Endereço") {
+                console.log("Entrei Aqui");
+                $('#modalEndereco').modal('show');
+            }
+        });
+
+        function SalvarEndereco() {
+            const logradouro = $('#modalEndereco #endereco_Logradouro').val();
+            const numero = $('#modalEndereco #endereco_Numero').val();
+            const complemento = $('#modalEndereco #endereco_Complemento').val();
+            const cep = $('#modalEndereco #endereco_CEP').val();
+            const bairro = $('#modalEndereco #endereco_Bairro').val();
+            const cidade = $('#modalEndereco #endereco_Cidade').val();
+            const estadoId = $('#modalEndereco #endereco_EstadoId').val();
+            $.ajax({
+                url: '/Enderecos/SalvarEndereco',
+                method: 'POST',
+                data: { logradouro: logradouro, numero: numero, complemento: complemento, cep: cep, bairro: bairro, cidade: cidade, estadoId: estadoId },
+                dataType: 'json',
+                success: function (data) {
+                    const listaEndereco = $('#item_EnderecoId');
+                    listaEndereco.empty();
+                    $.each(data, function (index, option) {
+                        listaEndereco.append("<option value='" + option.Value + "'>" + option.Text + "</option>");
+                    });
+                    listaEndereco.append("<option value=NovoEndereco>Novo Endereço</option>");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    if (XMLHttpRequest.status === 0) {
+                        alert(' Check Your Network.');
+                    } else if (XMLHttpRequest.status === 404) {
+                        alert('Requested URL not found.');
+                    } else if (XMLHttpRequest.status === 500) {
+                        alert('Internal Server Error.');
+                    } else {
+                        alert('Unknow Error.\n' + XMLHttpRequest.responseText);
+                    }
+                }
+            });
+        }
+    </script>
+    <script src="~/Scripts/FormataCPF.js" type="text/javascript"></script>
+    <script src="~/Scripts/formataCEP.js" type="text/javascript"></script>
+}

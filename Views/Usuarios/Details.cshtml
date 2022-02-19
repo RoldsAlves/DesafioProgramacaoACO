@@ -1,0 +1,116 @@
+﻿@model DesafioProgramacao.Models.Usuario
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Usuario</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.PerfilId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Perfil.Descricao)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CPF)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CPF)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Nome)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nome)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DataCadastro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DataCadastro)
+        </dd>
+        <div>
+            <table class="table table-responsive table-striped">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().TipoEndereco)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Logradouro)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Numero)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Complemento)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Bairro)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Cidade)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.Estado.UF)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.UsuarioEnderecos.Single().Endereco.CEP)
+                    </th>
+                </tr>
+                @foreach (var item in Model.UsuarioEnderecos)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.TipoEndereco)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Logradouro)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Numero)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Complemento)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Bairro)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Cidade)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.Estado.UF)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(model => item.Endereco.CEP)
+                        </td>
+                    </tr>
+                }
+            </table>
+        </div>
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.Id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
